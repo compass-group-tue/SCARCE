@@ -2,12 +2,12 @@
 <html lang="en"><head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>PACT Traces</title>
-<meta name="description" content="Full negotiation traces from PACT: messages, ballots and reasoning for every round, labeled with the paper's taxonomy."/>
+<title>SCARCE Traces</title>
+<meta name="description" content="Full negotiation traces from SCARCE: messages, ballots and reasoning for every round, labeled with the paper's taxonomy."/>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' fill='none' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4.5 11.5 16 4.5l11.5 7z' fill='%23c0606e' stroke='%23c0606e' stroke-width='1.6'/%3E%3Cpath d='M9 15v9' stroke='%234a76a8' stroke-width='3.4'/%3E%3Cpath d='M16 15v9' stroke='%235a9a5a' stroke-width='3.4'/%3E%3Cpath d='M23 15v9' stroke='%238e6bbf' stroke-width='3.4'/%3E%3Cpath d='M5 27.5h22' stroke='%232b2d31' stroke-width='2'/%3E%3C/svg%3E"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
-<script>try{const t=localStorage.getItem('pact-theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+<script>try{const t=localStorage.getItem('scarce-theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
 <style>
 :root{
   /* Palette follows the paper: taxonomy groups from Table 1, workers from Figure 1. */
@@ -229,7 +229,7 @@ mark{background:var(--mark);color:inherit;border-radius:2px;padding:0 1px}
 </style></head>
 <body>
 <header class="top">
-  <a class="brand" href="../index.html"><svg viewBox="0 0 32 32" aria-hidden="true"><g fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 11.5 16 4.5l11.5 7z" fill="var(--rel)" stroke="var(--rel)" stroke-width="1.6"/><path d="M9 15v9" stroke="var(--w1)" stroke-width="3.4"/><path d="M16 15v9" stroke="var(--w2)" stroke-width="3.4"/><path d="M23 15v9" stroke="var(--w3)" stroke-width="3.4"/><path d="M5 27.5h22" stroke="var(--ink)" stroke-width="2"/></g></svg>PACT</a><span class="crumb">Traces</span>
+  <a class="brand" href="../index.html"><svg viewBox="0 0 32 32" aria-hidden="true"><g fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 11.5 16 4.5l11.5 7z" fill="var(--rel)" stroke="var(--rel)" stroke-width="1.6"/><path d="M9 15v9" stroke="var(--w1)" stroke-width="3.4"/><path d="M16 15v9" stroke="var(--w2)" stroke-width="3.4"/><path d="M23 15v9" stroke="var(--w3)" stroke-width="3.4"/><path d="M5 27.5h22" stroke="var(--ink)" stroke-width="2"/></g></svg>SCARCE</a><span class="crumb">Traces</span>
   <button class="iconbtn runsbtn" id="runsBtn" aria-controls="side" aria-expanded="false">
     <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 4h12M2 8h12M2 12h12"/></svg>Runs</button>
   <label class="search" title="Search all text in this run">
@@ -424,7 +424,7 @@ const HELP=`<section class="panel help" id="help"><div>
   <li><b>Conversation</b>: each lane is a worker; arrows show who messaged whom, in order. An <b>exchange</b> is one pass of messages and replies.</li>
   <li><b>Ballots</b>: each worker’s vote, the position it asked for, and its reasoning.</li></ul></div>
   <button class="x" data-help>Got it</button></section>`;
-function helpOpen(){try{return localStorage.getItem('pact-help')!=='0';}catch(e){return true;}}
+function helpOpen(){try{return localStorage.getItem('scarce-help')!=='0';}catch(e){return true;}}
 /* ---------- behaviour map ---------- */
 function renderMap(){
   const run=S.run,rs=run.rounds,zero=new Set(run.zeroed||[]);
@@ -510,7 +510,7 @@ function renderRound(){
   renderStatus(rd);
   fitClamps();
   const rb=$('#roundbar');document.documentElement.style.setProperty('--stick',(rb.getBoundingClientRect().height+52)+'px');
-  document.title=`PACT Traces · ${runTitle(rinfo(S.key))} · round ${rd.r}`;
+  document.title=`SCARCE Traces · ${runTitle(rinfo(S.key))} · round ${rd.r}`;
 }
 function renderStatus(rd){
   const st=$('#status'),list=matchRounds();
@@ -574,7 +574,7 @@ function fitClamps(){
 }
 $('#main').addEventListener('click',e=>{
   const t=e.target;
-  const hb=t.closest('[data-help]');if(hb){const open=!$('#help');try{localStorage.setItem('pact-help',open?'1':'0');}catch(e){}
+  const hb=t.closest('[data-help]');if(hb){const open=!$('#help');try{localStorage.setItem('scarce-help',open?'1':'0');}catch(e){}
     if(open)$('.runhead').insertAdjacentHTML('afterend',HELP);else $('#help').remove();return;}
   const step=t.closest('[data-step]');if(step&&!step.disabled){const top=step.closest('.botnav');goRound(S.ri+ +step.dataset.step);if(top)$('#round').scrollIntoView({block:'start'});return;}
   const tab=t.closest('[data-tab]');if(tab){S.tab=tab.dataset.tab;renderRound();writeHash();return;}
@@ -659,6 +659,6 @@ async function openRun(key,h){
 
 /* ---------- theme ---------- */
 $('#theme').onclick=()=>{const r=document.documentElement,dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;
-  r.dataset.theme=dark?'light':'dark';try{localStorage.setItem('pact-theme',r.dataset.theme);}catch(e){}};
+  r.dataset.theme=dark?'light':'dark';try{localStorage.setItem('scarce-theme',r.dataset.theme);}catch(e){}};
 </script>
 </body></html>

@@ -2,12 +2,12 @@
 <html lang="en"><head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>PACT: Emergent Institutions in Multi-Agent Coding</title>
+<title>SCARCE: Emergent Institutions in Long-Horizon Multi-Agent Coding Systems</title>
 <meta name="description" content="Coding agents that share one execution resource build their own institutions: rules and commitments grounded in reciprocity, reputation and precedent."/>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' fill='none' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4.5 11.5 16 4.5l11.5 7z' fill='%23c0606e' stroke='%23c0606e' stroke-width='1.6'/%3E%3Cpath d='M9 15v9' stroke='%234a76a8' stroke-width='3.4'/%3E%3Cpath d='M16 15v9' stroke='%235a9a5a' stroke-width='3.4'/%3E%3Cpath d='M23 15v9' stroke='%238e6bbf' stroke-width='3.4'/%3E%3Cpath d='M5 27.5h22' stroke='%232b2d31' stroke-width='2'/%3E%3C/svg%3E"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet"/>
-<script>try{const t=localStorage.getItem('pact-theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+<script>try{const t=localStorage.getItem('scarce-theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
 <style>
 /* Palette follows the paper: taxonomy groups from Table 1, workers from Figure 1, models from Figures 14-18. */
 :root{
@@ -313,7 +313,7 @@ footer.site .brand{font-size:14px;color:var(--ink-2);margin:0;letter-spacing:.02
 </defs></svg>
 
 <nav class="nav" id="nav"><div class="wrap navin">
-  <a class="brand" href="#top"><svg class="logo" aria-hidden="true"><use href="#logo"/></svg>PACT</a>
+  <a class="brand" href="#top"><svg class="logo" aria-hidden="true"><use href="#logo"/></svg>SCARCE</a>
   <a class="l" href="#how">How it works</a>
   <a class="l" href="#results">Results</a>
   <a class="l" href="#examples">Examples</a>
@@ -325,7 +325,7 @@ footer.site .brand{font-size:14px;color:var(--ink-2);margin:0;letter-spacing:.02
 
 <header class="hero" id="top"><div class="wrap">
   <div class="weave l" id="weaveL" aria-hidden="true"></div><div class="weave r" id="weaveR" aria-hidden="true"></div>
-  <p class="eyebrow"><b>PACT</b> Programming Agents Contending for Time · Preprint 2026</p>
+  <p class="eyebrow"><b><span aria-hidden="true">⏳</span> SCARCE</b><span><b>S</b>hared <b>C</b>ompute A<b>R</b>ena for ag<b>E</b>nts · Preprint 2026</span></p>
   <h1>Emergent <em>Institutions</em> in Long&#8209;Horizon Multi&#8209;Agent Coding Systems</h1>
   <ul class="authors">
     <li>Abhinav Kumar<sup>1</sup></li><li>Rediet Abebe<sup>2,3,4</sup></li><li>Eugene Bagdasarian<sup>1</sup></li><li>Sahar Abdelnabi<sup>2,3,4</sup></li>
@@ -354,7 +354,7 @@ footer.site .brand{font-size:14px;color:var(--ink-2);margin:0;letter-spacing:.02
 
 <section id="how"><div class="wrap">
   <div class="sechead"><span class="secnum" style="--c:var(--amber)">1</span><h2>How a round works</h2></div>
-  <p class="intro">Each <b>worker</b> rebuilds a program from its executable and docs (ProgramBench) under a private deadline and credit budget. Inspecting, compiling and testing all need the <b>one shared sandbox</b>, so workers negotiate for time on it, round after round.</p>
+  <p class="intro">In <span aria-hidden="true">⏳</span> SCARCE, each <b>worker</b> rebuilds a program from its executable and docs (ProgramBench) under a private deadline and credit budget. Inspecting, compiling and testing all need the <b>one shared sandbox</b>, so workers negotiate for time on it, round after round.</p>
   <div class="how">
     <div class="panel"><h3><span class="ico"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m5.5 5-3 3 3 3M10.5 5l3 3-3 3"/></svg></span>Code alone</h3><p>Every worker has its own task, deadline and budget. Budgets and deadlines stay private.</p></div>
     <div class="panel"><h3><span class="ico" style="color:var(--amber)"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="10" height="10" rx="2"/></svg></span>Share one sandbox</h3><p>Nobody can run code without a time slot. Workers bid credits for slots and agree on an order.</p></div>
@@ -482,8 +482,8 @@ footer.site .brand{font-size:14px;color:var(--ink-2);margin:0;letter-spacing:.02
   <div class="endgrid">
     <div class="panel"><h3>Play the auction</h3><p>A one-minute scripted game built on behaviors from the traces. Bid against four agents and decide whether to keep a pact. It isn’t model output.</p><a class="btn" href="play.html">Play →</a></div>
     <div class="panel"><button class="copy" id="copyBib">Copy</button><h3>BibTeX</h3>
-<pre class="bib" id="bib">@misc{kumar2026pact,
-  title  = {{PACT}: Emergent Institutions in Long-Horizon
+<pre class="bib" id="bib">@misc{kumar2026scarce,
+  title  = {{SCARCE}: Emergent Institutions in Long-Horizon
             Multi-Agent Coding Systems},
   author = {Kumar, Abhinav and Abebe, Rediet and
             Bagdasarian, Eugene and Abdelnabi, Sahar},
@@ -494,7 +494,7 @@ footer.site .brand{font-size:14px;color:var(--ink-2);margin:0;letter-spacing:.02
 </div></section>
 
 <footer class="site"><div class="wrap">
-  <span class="brand"><svg class="logo" aria-hidden="true" style="width:20px;height:20px"><use href="#logo"/></svg>PACT · Programming Agents Contending for Time</span>
+  <span class="brand"><svg class="logo" aria-hidden="true" style="width:20px;height:20px"><use href="#logo"/></svg>SCARCE · Shared Compute ARena for agEnts</span>
   <span>UMass Amherst · ELLIS Institute Tübingen · MPI-IS · Tübingen AI Center</span>
 </div></footer>
 
@@ -503,7 +503,7 @@ footer.site .brand{font-size:14px;color:var(--ink-2);margin:0;letter-spacing:.02
 'use strict';
 const $=(s,el=document)=>el.querySelector(s),$$=(s,el=document)=>[...el.querySelectorAll(s)];
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const D=window.PACT;
+const D=window.SCARCE;
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* Definitions from the paper (Table 6, and Section 4.2 for readiness/variance-first and rule-making). */
@@ -532,7 +532,7 @@ const DEF={
 
 /* theme + nav */
 $('#theme').onclick=()=>{const r=document.documentElement,dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;
-  r.dataset.theme=dark?'light':'dark';try{localStorage.setItem('pact-theme',r.dataset.theme);}catch(e){}};
+  r.dataset.theme=dark?'light':'dark';try{localStorage.setItem('scarce-theme',r.dataset.theme);}catch(e){}};
 addEventListener('scroll',()=>$('#nav').classList.toggle('scrolled',scrollY>8),{passive:true});
 function tabBar(host,items,sel,onPick,cls='tab'){
   host.innerHTML=items.map((it,i)=>`<button class="${cls}" role="tab" aria-selected="${i===sel}" data-i="${i}">${it}</button>`).join('');
