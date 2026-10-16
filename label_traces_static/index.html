@@ -301,8 +301,9 @@ const setLabel=s=>SETTING[s]||s;
 const runNo=k=>{const m=/(\d+)$/.exec(k);return m?+m[1]:k;};
 const runTitle=info=>`${info.model} · ${setLabel(info.setting)} · Run ${runNo(info.key)}`;
 const GROUP_OF={};GROUPS.forEach(g=>g.codes.forEach(c=>GROUP_OF[c]=g.key));
-/* Behaviors suppressed from the trace viewer's tags/rows (display only; underlying round counts are left untouched). */
-const HIDE=new Set(['A12','A13','A17']);
+/* Per-run tag suppression: hide specific behavior tags/rows for a given run only (display only; underlying round counts are left untouched). */
+const HIDE_BY_RUN={HK4:new Set(['A12','A13','A17'])};
+const hidden=code=>{const h=S.run&&HIDE_BY_RUN[S.run.key];return!!(h&&h.has(code));};
 // Keyword cues per code. Used only to highlight likely lines; the judge's labels are per worker take, not per line.
 const CATPAT={
  A1:/anchor|first bid|opening bid|reference point|prior round'?s|from the (prior|earlier)/i,
@@ -366,7 +367,7 @@ function computeHits(){
 }
 function activeRe(){
   if(S.hits)return new RegExp(escRe(S.q),'gi');
-  if(S.beh&&CATPAT[S.beh]&&(S.run.rounds[S.ri].c[S.beh]||0)>0)return new RegExp(CATPAT[S.beh].source,'gi');
+  if(S.beh&&!hidden(S.beh)&&CATPAT[S.beh]&&(S.run.rounds[S.ri].c[S.beh]||0)>0)return new RegExp(CATPAT[S.beh].source,'gi');
   return null;
 }
 function markup(raw,re){
@@ -449,7 +450,7 @@ function renderMap(){
     h+=`<div class="ml on" title="Search">“${esc(S.q)}”</div>`+S.hits.map((n,i)=>`<i class="ms" data-i="${i}" data-k="s" style="--a:${n?(.3+.7*n/mx).toFixed(2):0}"></i>`).join('');
   }
   for(const g of GROUPS){
-    const codes=g.codes.filter(c=>!zero.has(c)&&!HIDE.has(c));if(!codes.length)continue;
+    const codes=g.codes.filter(c=>!zero.has(c)&&!hidden(c));if(!codes.length)continue;
     h+=`<div class="mg" style="--c:${GC[g.key]}">${g.label}</div>`;
     for(const c of codes){
       const any=rs.some(rd=>(rd.c[c]||0)>0);
@@ -495,7 +496,7 @@ function onMapClick(e){
 /* ---------- round ---------- */
 function renderRound(){
   const rd=S.run.rounds[S.ri],N=S.run.rounds.length,re=activeRe();
-  const coded=GROUPS.flatMap(g=>g.codes.filter(c=>(rd.c[c]||0)>0&&!HIDE.has(c)).sort((a,b)=>rd.c[b]-rd.c[a]).map(c=>({c,g:g.key,v:rd.c[c]})));
+  const coded=GROUPS.flatMap(g=>g.codes.filter(c=>(rd.c[c]||0)>0&&!hidden(c)).sort((a,b)=>rd.c[b]-rd.c[a]).map(c=>({c,g:g.key,v:rd.c[c]})));
   const chips=coded.length?coded.map(x=>`<button class="chip ${S.beh===x.c?'on':''}" style="--c:${GC[x.g]}" data-code="${x.c}" title="${esc(DEF[x.c]||'')} (${x.v} of ${rd.nw} takes; click to highlight likely lines)">${esc(name(x.c))}<span class="num">${x.v}/${rd.nw}</span></button>`).join('')
     :'<span class="none">No behaviors coded in this round.</span>';
   const body=S.tab==='chat'?renderChat(rd,re):renderBallots(rd,re);
@@ -656,7 +657,7 @@ async function openRun(key,h){
   }
   h=h||{};
   if('tab' in h)S.tab=h.tab==='ballots'?'ballots':'chat';
-  if('b' in h&&h.b!==undefined&&(h.b===''||(CATPAT[h.b]&&!HIDE.has(h.b))))S.beh=h.b;
+  if('b' in h&&h.b!==undefined&&(h.b===''||(CATPAT[h.b]&&!hidden(h.b))))S.beh=h.b;
   if(h.q!==undefined&&h.q!==S.q){S.q=h.q;$('#q').value=h.q;computeHits();}
   const ri=h.r!=null?S.run.rounds.findIndex(x=>String(x.r)===String(h.r)):-1;
   S.ri=ri>=0?ri:0;S.w=h.w||0;
