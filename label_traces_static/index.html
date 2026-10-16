@@ -54,6 +54,12 @@ svg{display:block}
 .iconbtn:hover{color:var(--ink);border-color:var(--line-2)}
 .runsbtn{display:none}
 
+/* paper-vs-traces note */
+.notebox{display:flex;gap:11px;align-items:flex-start;padding:12px clamp(16px,3vw,44px);background:var(--accent-soft);border-bottom:1px solid var(--line);color:var(--ink-2);font-size:13px;line-height:1.5}
+.notebox svg{flex:none;width:16px;height:16px;margin-top:2px;color:var(--accent)}
+.notebox p{margin:0;max-width:96ch}
+.notebox b{color:var(--ink);font-weight:600}
+
 /* layout */
 .app{display:grid;grid-template-columns:236px minmax(0,1fr);min-height:calc(100vh - var(--top))}
 aside{position:sticky;top:var(--top);height:calc(100vh - var(--top));overflow:auto;border-right:1px solid var(--line);padding:16px 12px 40px;background:var(--bg)}
@@ -239,6 +245,10 @@ mark{background:var(--mark);color:inherit;border-radius:2px;padding:0 1px}
   <button class="iconbtn" id="theme" aria-label="Toggle dark mode">
     <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="5.5"/><path d="M8 2.5v11A5.5 5.5 0 0 0 8 2.5z" fill="currentColor"/></svg></button>
 </header>
+<div class="notebox" role="note">
+  <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="6.5"/><path d="M8 7.2v4.2" stroke-linecap="round"/><circle cx="8" cy="4.7" r=".95" fill="currentColor" stroke="none"/></svg>
+  <p><b>Reading these traces vs. the paper.</b> Table&nbsp;1 in the paper reports prevalence at the <b>round level</b> — each number reflects the actual negotiated behavior across a full interactive round. The labels shown here are classified at the <b>message level</b>, for readability and demonstration, so the per-message tags below do not map one-to-one onto the paper's round-level counts.</p>
+</div>
 <div class="app">
   <aside id="side" aria-label="Runs"></aside>
   <div class="scrim" id="scrim"></div>
@@ -291,6 +301,8 @@ const setLabel=s=>SETTING[s]||s;
 const runNo=k=>{const m=/(\d+)$/.exec(k);return m?+m[1]:k;};
 const runTitle=info=>`${info.model} · ${setLabel(info.setting)} · Run ${runNo(info.key)}`;
 const GROUP_OF={};GROUPS.forEach(g=>g.codes.forEach(c=>GROUP_OF[c]=g.key));
+/* Behaviors suppressed from the trace viewer's tags/rows (display only; underlying round counts are left untouched). */
+const HIDE=new Set(['A12','A13','A17']);
 // Keyword cues per code. Used only to highlight likely lines; the judge's labels are per worker take, not per line.
 const CATPAT={
  A1:/anchor|first bid|opening bid|reference point|prior round'?s|from the (prior|earlier)/i,
@@ -437,7 +449,7 @@ function renderMap(){
     h+=`<div class="ml on" title="Search">“${esc(S.q)}”</div>`+S.hits.map((n,i)=>`<i class="ms" data-i="${i}" data-k="s" style="--a:${n?(.3+.7*n/mx).toFixed(2):0}"></i>`).join('');
   }
   for(const g of GROUPS){
-    const codes=g.codes.filter(c=>!zero.has(c));if(!codes.length)continue;
+    const codes=g.codes.filter(c=>!zero.has(c)&&!HIDE.has(c));if(!codes.length)continue;
     h+=`<div class="mg" style="--c:${GC[g.key]}">${g.label}</div>`;
     for(const c of codes){
       const any=rs.some(rd=>(rd.c[c]||0)>0);
@@ -483,7 +495,7 @@ function onMapClick(e){
 /* ---------- round ---------- */
 function renderRound(){
   const rd=S.run.rounds[S.ri],N=S.run.rounds.length,re=activeRe();
-  const coded=GROUPS.flatMap(g=>g.codes.filter(c=>(rd.c[c]||0)>0).sort((a,b)=>rd.c[b]-rd.c[a]).map(c=>({c,g:g.key,v:rd.c[c]})));
+  const coded=GROUPS.flatMap(g=>g.codes.filter(c=>(rd.c[c]||0)>0&&!HIDE.has(c)).sort((a,b)=>rd.c[b]-rd.c[a]).map(c=>({c,g:g.key,v:rd.c[c]})));
   const chips=coded.length?coded.map(x=>`<button class="chip ${S.beh===x.c?'on':''}" style="--c:${GC[x.g]}" data-code="${x.c}" title="${esc(DEF[x.c]||'')} (${x.v} of ${rd.nw} takes; click to highlight likely lines)">${esc(name(x.c))}<span class="num">${x.v}/${rd.nw}</span></button>`).join('')
     :'<span class="none">No behaviors coded in this round.</span>';
   const body=S.tab==='chat'?renderChat(rd,re):renderBallots(rd,re);
@@ -644,7 +656,7 @@ async function openRun(key,h){
   }
   h=h||{};
   if('tab' in h)S.tab=h.tab==='ballots'?'ballots':'chat';
-  if('b' in h&&h.b!==undefined&&(h.b===''||CATPAT[h.b]))S.beh=h.b;
+  if('b' in h&&h.b!==undefined&&(h.b===''||(CATPAT[h.b]&&!HIDE.has(h.b))))S.beh=h.b;
   if(h.q!==undefined&&h.q!==S.q){S.q=h.q;$('#q').value=h.q;computeHits();}
   const ri=h.r!=null?S.run.rounds.findIndex(x=>String(x.r)===String(h.r)):-1;
   S.ri=ri>=0?ri:0;S.w=h.w||0;

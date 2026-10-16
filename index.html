@@ -691,25 +691,25 @@ function onResize(host,fn){let w=0;new ResizeObserver(()=>{if(Math.abs(host.clie
   draw();side(pick);onResize(host,draw);
 })();
 
-/* ---------- drift: the paper's Figures 15-18, interactive ---------- */
+/* ---------- drift: the paper's Figures 16-19, interactive ---------- */
 (()=>{
   const LP=D.lp,LING=D.ling;
   const MODEL={'GLM-5.3':'var(--m1)','glm-5.2':'var(--m2)','kimi-k3':'var(--m3)','luna':'var(--m4)','luna-max':'var(--m5)','haiku-4.5':'var(--m6)','gpt-oss':'var(--m7)'};
   const BEH={'Price primary':'var(--m1)','Rule-making':'var(--m3)','Welfare-concession':'var(--m7)','Coalition formation':'var(--m5)','Scope-reduction':'var(--m6)','Renegotiation':'var(--m4)',
     'Reputation':'var(--f-red)','Readiness/variance-first':'var(--f-teal)','Shortest-job-first':'var(--f-brown)','EDF/deadline':'var(--f-blue)','Social-proof / convergence':'var(--f-olive)','Reciprocity':'var(--f-mag)','Deadline-ultimatum':'var(--f-navy)'};
-  // Figure 15 panels; labels use the taxonomy names where one exists.
+  // Figure 16 panels; labels use the taxonomy names where one exists.
   const RB=[['a9','Price primary'],['a6','Tie-break / deference'],['b11','Rule-making'],['rel','Relational / coalition'],['b12','Scope-reduction'],['a2','Concession / yielding']];
   const smooth=a=>a.map((_,i)=>{const w=a.slice(Math.max(0,i-1),i+2).filter(v=>v!=null);return w.length?+(w.reduce((s,v)=>s+v,0)/w.length).toFixed(1):null;});
   const ARMS=Object.keys(LP.arms),RMODELS=Object.keys(LP.round),r22=[1,4,8,12,16,20,22],subs=[1,2,3,4];
   const TAKES='“% of takes” is the share of worker turns showing the behavior.';
   const VIEWS=[
-    {name:'Behavior by setting',fig:16,opts:ARMS.map(k=>LP.arms[k].lever.replace('Fixed starting bid','Fixed bid')),note:`GLM-5.3. Each setting changes one rule and runs its own four-subrun experiment. ${TAKES}`,
+    {name:'Behavior by setting',fig:17,opts:ARMS.map(k=>LP.arms[k].lever.replace('Fixed starting bid','Fixed bid')),note:`GLM-5.3. Each setting changes one rule and runs its own four-subrun experiment. ${TAKES}`,
      cfg:i=>{const a=LP.arms[ARMS[i]];return{series:a.series.map(s=>({name:s.label,color:BEH[s.label]||'var(--ink-3)',pts:s.vals.map((v,k)=>[a.phases[k],v])})),xticks:a.phases,xfmt:v=>'S'+v,xname:'Subrun',ylabel:'% of takes'};}},
-    {name:'Behavior by round',fig:15,opts:RB.map(x=>x[1]),note:`Per-round prevalence, 3-round smoothed. ${TAKES}`,
+    {name:'Behavior by round',fig:16,opts:RB.map(x=>x[1]),note:`Per-round prevalence, 3-round smoothed. ${TAKES}`,
      cfg:i=>{const c=RB[i][0];return{series:RMODELS.map(m=>({name:m,color:MODEL[m]||'var(--ink-3)',pts:smooth(LP.round[m][c]).map((v,k)=>[k+1,v])})),xticks:r22,xname:'Round',ylabel:'% of takes'};}},
-    {name:'Language by subrun',fig:17,opts:LING.sub.map(p=>p.title),note:'Surface statistics of the negotiators’ private reasoning, per model.',
+    {name:'Language by subrun',fig:18,opts:LING.sub.map(p=>p.title),note:'Surface statistics of the negotiators’ private reasoning, per model.',
      cfg:i=>{const p=LING.sub[i];return{series:Object.keys(p.data).map(m=>({name:m,color:MODEL[m]||'var(--ink-3)',pts:p.data[m].map((v,k)=>[k+1,v])})),xticks:subs,xfmt:v=>'S'+v,xname:'Subrun',ylabel:p.ylabel};}},
-    {name:'Language by round',fig:18,opts:LING.round.metrics.map(m=>m.title),note:'Per round, 3-round smoothed.',
+    {name:'Language by round',fig:19,opts:LING.round.metrics.map(m=>m.title),note:'Per round, 3-round smoothed.',
      cfg:i=>{const met=LING.round.metrics[i];return{series:LING.round.models.map(m=>({name:m,color:MODEL[m]||'var(--ink-3)',pts:LING.round.data[m][met.key].map((v,k)=>[k+1,v])})),xticks:r22,xname:'Round',ylabel:met.ylabel};}},
   ];
   let v=0,o=0;const host=$('#dChart');
